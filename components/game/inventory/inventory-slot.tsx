@@ -26,7 +26,7 @@ export function InventorySlot({ position, slot }: InventorySlotProps) {
     transform,
     transition,
   } = useSortable({
-    id: position,
+    id: position.toString(),
   });
 
   const style = {
@@ -63,7 +63,6 @@ export function InventorySlot({ position, slot }: InventorySlotProps) {
               RARITY_BACKGROUNDS[item.rarity]
             )}
           >
-            {/* Ici, nous pourrions ajouter une icône pour l'objet */}
             {item.stackable && item.quantity > 1 && (
               <span className="absolute bottom-0 right-0 text-xs bg-black/50 text-white px-1 rounded-tl">
                 {item.quantity}

@@ -1,0 +1,96 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = "file:./dev.db"
+}
+
+model User {
+  id            String    @id @default(uuid())
+  name          String
+  email         String    @unique
+  emailVerified DateTime?
+  image         String?
+  characters    Character[]
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+}
+
+model Character {
+  id          String    @id @default(uuid())
+  name        String
+  level       Int       @default(1)
+  experience  Int       @default(0)
+  village     String
+  stats       Stats?
+  inventory   Inventory?
+  missions    Mission[]
+  questChains QuestChain[]
+  userId      String
+  user        User      @relation(fields: [userId], references: [id])
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+}
+
+model Stats {
+  id          String    @id @default(uuid())
+  taijutsu    Int       @default(5)
+  ninjutsu    Int       @default(5)
+  genjutsu    Int       @default(5)
+  fortitude   Int       @default(50)
+  chakra      Int       @default(10)
+  initiative  Int       @default(5)
+  precision   Int       @default(5)
+  speed       Int       @default(5)
+  characterId String    @unique
+  character   Character @relation(fields: [characterId], references: [id])
+}
+
+model Inventory {
+  id          String    @id @default(uuid())
+  maxSlots    Int       @default(20)
+  coins       Int       @default(0)
+  items       Item[]
+  characterId String    @unique
+  character   Character @relation(fields: [characterId], references: [id])
+}
+
+model Item {
+  id          String    @id @default(uuid())
+  name        String
+  description String
+  type        String
+  rarity      String
+  stats       String?   // JSON string pour les stats
+  stackable   Boolean   @default(false)
+  quantity    Int       @default(1)
+  position    Int
+  inventoryId String
+  inventory   Inventory @relation(fields: [inventoryId], references: [id])
+}
+
+model Mission {
+  id          String    @id @default(uuid())
+  type        String
+  name        String
+  description String
+  level       Int
+  status      String
+  objectives  String    // JSON string pour les objectifs
+  rewards     String    // JSON string pour les récompenses
+  characterId String
+  character   Character @relation(fields: [characterId], references: [id])
+}
+
+model QuestChain {
+  id          String    @id @default(uuid())
+  name        String
+  description String
+  missions    String    // JSON string pour les IDs des missions
+  currentStep Int       @default(0)
+  rewards     String    // JSON string pour les récompenses
+  characterId String
+  character   Character @relation(fields: [characterId], references: [id])
+}

@@ -23,7 +23,7 @@ export const INITIAL_STATS: CharacterStats = {
   taijutsu: 5,
   ninjutsu: 5,
   genjutsu: 5,
-  fortitude: 10,
+  fortitude: 50,
   chakra: 10,
   initiative: 5,
   precision: 5,
